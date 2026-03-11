@@ -3,6 +3,29 @@
 -- To be able to customize and/or fix entries that aren't yet detected
 -- by the extractor logic, this file here can be used to save overwrites.
 
+do -- zones
+  -- Several zone IDs are phantom duplicates: they share a name with a
+  -- functional zone but have no minimap data and their unit data is deleted.
+  -- GetMapIDByName scans the locale table with pairs() (non-deterministic),
+  -- so it may return a phantom ID instead of the functional one, causing
+  -- quests and minimap nodes to not appear inside those dungeons.
+  --
+  -- Phantom -> Functional mappings:
+  --   5600 "Dragonmaw Retreat"  -> 5601 (has minimap + units)
+  --   5098 "Hateforge Quarry"   -> 5103 (has minimap + units)
+  --   5550 "Ruins of Grim Batol"-> 5639 (has units)
+  local phantom_zones = { 5600, 5098, 5550 }
+  local zone_locales = { "enUS", "deDE", "esES", "ptBR", "zhCN" }
+  for _, locale in pairs(zone_locales) do
+    local tbl = pfDB["zones"][locale .. "-turtle"]
+    if tbl then
+      for _, zid in pairs(phantom_zones) do
+        tbl[zid] = nil
+      end
+    end
+  end
+end
+
 do -- area trigger
 end
 
