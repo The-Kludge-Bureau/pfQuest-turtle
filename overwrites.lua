@@ -4,17 +4,36 @@
 -- by the extractor logic, this file here can be used to save overwrites.
 
 do -- zones
-  -- Several zone IDs are phantom duplicates: they share a name with a
-  -- functional zone but have no minimap data and their unit data is deleted.
-  -- GetMapIDByName scans the locale table with pairs() (non-deterministic),
-  -- so it may return a phantom ID instead of the functional one, causing
-  -- quests and minimap nodes to not appear inside those dungeons.
+  -- Several zone IDs share a name with a functional zone but have no NPC or
+  -- object coordinate references, making them phantoms. GetMapIDByName scans
+  -- the locale table with pairs() (non-deterministic order), so it may return
+  -- a phantom ID instead of the functional one, causing quests and minimap
+  -- nodes to not appear inside those dungeons.
   --
-  -- Phantom -> Functional mappings:
+  -- TurtleWoW-specific phantom -> Functional mappings:
   --   5600 "Dragonmaw Retreat"  -> 5601 (has minimap + units)
   --   5098 "Hateforge Quarry"   -> 5103 (has minimap + units)
   --   5550 "Ruins of Grim Batol"-> 5639 (has units)
-  local phantom_zones = { 5600, 5098, 5550 }
+  --
+  -- Vanilla dungeon zone IDs that still hold all NPC/object data (verified
+  -- via coordinate references in units-turtle.lua and objects-turtle.lua):
+  --   209  "Shadowfang Keep"  (181 NPC refs, 35 object refs)
+  --   1581 "The Deadmines"
+  --   1583 "Blackrock Spire"
+  --   1584 "Blackrock Depths" (1085 NPC refs, 462 object refs)
+  -- The 5000+ IDs below share those names but have zero NPC/object refs.
+  -- They are removed so GetMapIDByName resolves to the IDs with real content.
+  --
+  -- Vanilla ID -> Phantom replacement(s):
+  --    209 "Shadowfang Keep"  -> 5132, 5150, 5161, 5169, 5173, 5177
+  --   1581 "The Deadmines"   -> 5138
+  --   1583 "Blackrock Spire" -> 5139, 5155, 5164, 5170, 5178
+  --   1584 "Blackrock Depths"-> 5140
+  local phantom_zones = {
+    5600, 5098, 5550,
+    5132, 5138, 5139, 5140, 5150, 5161,
+    5155, 5164, 5169, 5170, 5173, 5177, 5178,
+  }
   local zone_locales = { "enUS", "deDE", "esES", "ptBR", "zhCN" }
   for _, locale in pairs(zone_locales) do
     local tbl = pfDB["zones"][locale .. "-turtle"]
@@ -30,9 +49,6 @@ do -- area trigger
 end
 
 do -- items
-end
-
-do -- units/npcs
 end
 
 do -- quests
