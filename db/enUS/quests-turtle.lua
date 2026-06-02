@@ -39872,6 +39872,7 @@ pfDB["quests"]["enUS-turtle"] = {
   },
   [42057] = {
     ["D"] = "You are here. Ready to start?",
+    ["O"] = "",
     ["T"] = "Light of An\'she",
   },
   [42058] = {
@@ -39882,6 +39883,7 @@ pfDB["quests"]["enUS-turtle"] = {
   },
   [42059] = {
     ["D"] = "You are here. Ready to start?",
+    ["O"] = "",
     ["T"] = "Spiritwalk",
   },
   [42060] = {
