@@ -1,7 +1,6 @@
 pfDB["zones"]["deDE-turtle"] = {
   [2] = "Die Endlose Küste",
   [13] = "Der Weltenbaum",
-  [15] = "Düstermarschen",
   [20] = "Mondbruch",
   [25] = "Der Schwarzfels",
   [35] = "Beutebucht",
